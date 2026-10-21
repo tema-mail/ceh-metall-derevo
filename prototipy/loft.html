@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Прототип – Домашний лофт (/mebel-loft)</title>
+<!-- kit.css вставляется целиком внутрь <style> (прототип – один файл, открывается без интернета) -->
+<style>/* Комплект чёрно-белого прототипа (маркетолог → site-prototype).
+   Прототип показывает смысл, текст, порядок и действие – не дизайн. Цвета только серые; дизайнер делает визуал после «да» владельца.
+   Блок: <section class="w-block" data-n="1" data-name="Первый экран" data-question="вопрос клиента" data-proof="опора"> */
+:root {
+  --ink: #141414; --muted: #5f5f5f; --line: #b9b9b9; --fill: #ececec; --fill2: #f6f6f6; --paper: #ffffff;
+  --note: #fff6c8; --note-line: #c9b44a; --ask: #7a1f1f;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, Menlo, Consolas, monospace;
+  --wrap: 1180px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.55 var(--font); }
+img { max-width: 100%; }
+a { color: var(--ink); }
+h1, h2, h3 { margin: 0; line-height: 1.2; text-wrap: balance; }
+h1 { font-size: clamp(28px, 4.2vw, 46px); }
+h2 { font-size: clamp(22px, 3vw, 32px); }
+h3 { font-size: 18px; }
+p { margin: 0; }
+.w-wrap { max-width: var(--wrap); margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.w-stack { display: grid; gap: 14px; }
+.w-muted { color: var(--muted); }
+
+/* Панель прототипа: переключатели «Логика» и «Комментарии» */
+.w-bar { position: sticky; top: 0; z-index: 50; background: var(--ink); color: #fff; font: 13px/1.3 var(--mono); }
+.w-bar .w-wrap { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding-block: 8px; }
+.w-bar b { font-weight: 600; }
+.w-bar label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+
+/* Блок и его подпись логики */
+.w-block { border-top: 1px dashed var(--line); padding-block: 40px; position: relative; }
+.w-logic { display: none; font: 12.5px/1.45 var(--mono); background: var(--fill2); border: 1px solid var(--line); padding: 8px 10px; margin-bottom: 18px; }
+body.show-logic .w-logic { display: block; }
+.w-logic b { font-weight: 700; }
+.w-note { display: none; background: var(--note); border: 1px dashed var(--note-line); padding: 8px 10px; font-size: 13.5px; margin-top: 12px; }
+body.show-notes .w-note { display: block; }
+.w-note::before { content: "Дизайнеру: "; font-weight: 700; }
+.w-seo { display: none; font: 13px/1.5 var(--mono); background: #eef3ff; border: 1px solid #8aa0d6; padding: 12px 14px; margin: 12px auto; max-width: var(--wrap); }
+body.show-seo .w-seo { display: block; }
+.w-seo table { border-collapse: collapse; width: 100%; }
+.w-seo td { border-top: 1px solid #c9d4ee; padding: 4px 6px; vertical-align: top; }
+.w-seo td:first-child { white-space: nowrap; font-weight: 700; width: 1%; }
+.w-seo .bad { color: var(--ask); font-weight: 700; }
+.w-seo ul { margin: 0; padding-left: 18px; }
+.w-ask { color: var(--ask); font-weight: 600; background: #f7e9e9; padding: 0 4px; }
+
+/* Место под фото/видео/схему: роль, а не «картинка» */
+.w-media { background: repeating-linear-gradient(45deg, var(--fill), var(--fill) 10px, var(--fill2) 10px, var(--fill2) 20px);
+  border: 1px solid var(--line); min-height: 220px; display: grid; place-items: center; text-align: center; padding: 16px;
+  color: var(--muted); font-size: 14px; }
+.w-media::before { content: "▣ "; }
+.w-media.small { min-height: 120px; }
+
+/* Кнопки */
+.w-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; border: 2px solid var(--ink);
+  background: var(--ink); color: #fff; font-weight: 600; text-decoration: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+.w-btn.ghost { background: transparent; color: var(--ink); }
+.w-btn[disabled] { opacity: .45; cursor: not-allowed; }
+.w-hint { font-size: 13px; color: var(--muted); }
+
+/* Шапка */
+.w-header .w-wrap { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; justify-content: space-between; padding-block: 12px; }
+.w-logo { border: 2px solid var(--ink); padding: 6px 10px; font-weight: 700; }
+.w-descr { font-size: 13.5px; color: var(--muted); max-width: 34ch; }
+.w-contacts-top { display: grid; gap: 2px; font-size: 14px; text-align: right; }
+.w-nav { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14.5px; border-top: 1px solid var(--line); padding-block: 8px; }
+
+/* Первый экран */
+.w-hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: center; }
+.w-hero ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.w-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+/* Сетки и карточки */
+.w-grid { display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 14px; }
+.w-card { border: 1px solid var(--line); padding: 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.w-card .w-media { min-height: 140px; }
+.w-price { font-weight: 700; }
+
+/* Этапы */
+.w-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr)); gap: 14px; counter-reset: st; }
+.w-steps li { border: 1px solid var(--line); padding: 14px; counter-increment: st; display: grid; gap: 6px; }
+.w-steps li::before { content: counter(st); font-weight: 700; font-size: 22px; }
+
+/* Таблица */
+.w-table-wrap { overflow-x: auto; }
+.w-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.w-table th, .w-table td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+.w-table th { background: var(--fill2); }
+
+/* FAQ */
+.w-faq details { border: 1px solid var(--line); padding: 12px 14px; }
+.w-faq details + details { border-top: 0; }
+.w-faq summary { font-weight: 600; cursor: pointer; }
+
+/* Форма */
+.w-form { border: 2px solid var(--ink); padding: 18px; display: grid; gap: 12px; max-width: 520px; }
+.w-field { display: grid; gap: 4px; font-size: 14px; }
+.w-field input, .w-field select { min-height: 44px; border: 1px solid var(--ink); padding: 0 10px; font: inherit; background: #fff; }
+.w-check { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; }
+
+/* Полоса призыва */
+.w-cta { background: var(--fill); padding: 24px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; }
+
+/* Подвал */
+.w-footer { background: var(--fill2); border-top: 1px solid var(--line); padding-block: 28px; font-size: 14px; }
+
+/* Липкая панель действий на телефоне */
+.w-sticky { display: none; }
+header.w-block { padding-block: 0; border-top: 0; }
+header.w-block > .w-logic { margin: 8px auto; max-width: var(--wrap); }
+
+@media (max-width: 760px) {
+  .w-hide-m { display: none !important; }
+  /* Мобильная шапка: логотип, короткий дескриптор и «Меню»; звонок и мессенджеры – в липкой панели снизу */
+  .w-header .w-wrap { flex-wrap: nowrap; padding-block: 8px; gap: 10px; }
+  .w-header .w-contacts-top, .w-header .w-wrap > .w-btn, .w-nav { display: none !important; }
+  .w-header .w-descr { font-size: 12px; line-height: 1.3; }
+  .w-header > .w-wrap:first-of-type::after { content: "☰ Меню"; margin-left: auto; border: 1px solid var(--ink); padding: 6px 10px; font-size: 13px; white-space: nowrap; }
+  .w-hero .w-media, .w-block[data-n="1"] .w-media:first-of-type { min-height: 160px; }
+  .w-bar .w-wrap { padding-block: 4px; gap: 4px 10px; font-size: 11px; }
+  .w-hero { grid-template-columns: 1fr; }
+  .w-grid { grid-template-columns: repeat(var(--cols-m, 2), minmax(0, 1fr)); }
+  .w-steps { grid-template-columns: 1fr; }
+  .w-contacts-top { text-align: left; }
+  .w-block { padding-block: 28px; }
+  .w-sticky { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    padding: 8px max(12px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
+    background: #fff; border-top: 1px solid var(--line); }
+  body { padding-bottom: 72px; }
+}
+@media (max-width: 420px) { .w-grid.one-m { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<!-- Прототип «Домашний лофт». Вход: docs/marketing/2026-10-19-loft.md, docs/marketing/seo-loft.md. -->
+<div class="w-bar"><div class="w-wrap">
+  <b>Прототип · Цех металл + дерево · Домашний лофт (/mebel-loft) · версия 21.10.2026</b>
+  <label><input type="checkbox" id="t-logic"> Логика блоков</label>
+  <label><input type="checkbox" id="t-notes"> Комментарии дизайнеру</label>
+  <label><input type="checkbox" id="t-seo"> SEO страницы</label>
+  <span>Меток «запросить»: <b id="ask-count">0</b></span>
+</div></div>
+
+<!-- SEO-задание страницы (docs/marketing/seo-loft.md, сделано маркетологом вместо site-seo – перепроверить site-seo). -->
+<script type="application/json" id="w-seo">{"title": "Мебель лофт на заказ в Новосибирске – кровати и столы на металле", "description": "Металлические кровати, столы лофт, стеллажи и подстолья по вашим размерам. Сварной каркас и массив дерева, цех в Новосибирске, доставка по России.", "h1": "Кровати и столы в стиле лофт по вашим размерам – от цеха в Новосибирске", "zapros": "кровать металлическая на заказ новосибирск; доп.: стол лофт, мебель лофт, стол из массива, стеллаж лофт, кровать лофт, подстолье металлическое, стол из слэба; интент коммерческий", "schema": "Organization, FAQPage; Product – только когда на странице видна цена (сейчас цены [запросить] – Product не ставим)", "links": ["/sad-i-otdyh – летняя линейка цеха: сад и отдых", "/kupolnye-besedki – купольные беседки цеха"]}</script>
+<div class="w-seo" id="w-seo-box"></div>
+
+<style>/* Прототип «Домашний лофт»: выбор вариантами в конструкторе, без цвета */
+.w-choice { border: 1px solid var(--line); padding: 12px 14px; margin: 0; display: grid; gap: 10px; min-width: 0; }
+.w-choice legend { font-weight: 700; padding: 0 4px; }
+.w-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.w-opts label { border: 1px solid var(--ink); min-height: 44px; padding: 0 12px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 15px; }
+.w-form.wide { max-width: 760px; }
+.w-field textarea { border: 1px solid var(--ink); padding: 8px 10px; font: inherit; min-height: 72px; }
+.w-card .w-btn { min-height: 44px; padding: 0 12px; font-size: 15px; }
+@media (max-width: 760px) { .w-grid > :last-child:nth-child(odd) { grid-column: 1 / -1; } .w-opts label { flex: 1 1 40%; } }
+</style>
+
+<!-- блок 0: шапка – кто вы; дескриптор из плана; компания не названа -->
+<header class="w-header w-block" data-n="0" data-name="Шапка" data-question="Кто вы?" data-proof="дескриптор: мебель лофт на металлокаркасе по размерам, цех в НСО">
+  <div class="w-wrap">
+    <span class="w-logo">ЛОГО</span>
+    <span class="w-descr">Мебель лофт на металлокаркасе по вашим размерам – цех в Новосибирской области <span class="w-ask w-hide-m">[запросить: название компании]</span></span>
+    <span class="w-contacts-top"><a href="tel:+70000000000"><span class="w-ask">[запросить: телефон]</span></a><span class="w-ask">[запросить: мессенджеры и часы работы]</span></span>
+    <a class="w-btn ghost" href="#konstruktor">Рассчитать по размерам</a>
+  </div>
+  <nav class="w-wrap w-nav"><a href="#katalog">Что делаем</a><a href="#metall">Металл и массив</a><a href="#konstruktor">Собрать свою</a><a href="#raboty">Работы</a><a href="#dostavka">Доставка</a><a href="#voprosy">Вопросы</a></nav>
+</header>
+
+<main>
+  <!-- блок 1: первый экран – оффер по размеру; снимает «в магазине нет моего размера»; текст из плана, H1 из SEO-задания -->
+  <section class="w-block" data-n="1" data-name="Первый экран" data-question="Сделаете мне кровать или стол лофт по размеру?" data-proof="своё производство; Wordstat НСО: «кровать металлическая» 700–1 300 запросов в месяц круглый год">
+    <div class="w-wrap">
+      <div class="w-hero">
+        <div class="w-stack">
+          <h1>Кровати и столы в стиле лофт по вашим размерам – от цеха в Новосибирске</h1>
+          <p>Металлический каркас и массив дерева. Без ДСП, без скрипа, под ваш размер и цвет.</p>
+          <ul>
+            <li><b>Любой размер</b> – кровать 140, 160, 180, 200 или нестандарт</li>
+            <li><b>Каркас на сварке</b> – не шатается и не скрипит</li>
+            <li><b>Доставка по Новосибирску и России</b> <span class="w-ask">[запросить: условия]</span></li>
+          </ul>
+          <div class="w-actions"><a class="w-btn" href="#konstruktor">Рассчитать по размерам</a></div>
+          <p class="w-hint">Пришлите размер или фото – ответим ценой в течение дня <span class="w-ask">[запросить: подтвердить срок ответа]</span></p>
+        </div>
+        <div class="w-media" data-alt="Металлическая кровать лофт с изголовьем из массива дуба в спальне">Спальня с металлической кроватью и деревянным изголовьем, тёплый свет, рядом прикроватная тумба той же серии. Доказывает: это мебель для дома, а не цеховая конструкция. Фото работы цеха, не сток <span class="w-ask">[запросить: фото]</span></div>
+      </div>
+      <p class="w-note">Фон первого экрана – живое фото спальни, тёплый свет. На телефоне фото ниже кнопки, H1 и «Рассчитать по размерам» в первом окне.</p>
+    </div>
+  </section>
+
+  <!-- блок 2: каталог – 5 групп; снимает «что можно и почём»; текст из плана + подстолья по SEO-заданию -->
+  <section class="w-block" id="katalog" data-n="2" data-name="Каталог: 5 групп" data-question="Что можно заказать и почём?" data-proof="кровати / столы / стеллажи / барные стойки / подстолья; цены [запросить]; Avito НСО: столы лофт 4,5–158 тыс. ₽, медиана 18,9 тыс. ₽">
+    <div class="w-wrap w-stack">
+      <h2>Кровати, столы, стеллажи и подстолья – что делаем</h2>
+      <div class="w-grid" style="--cols:5;--cols-m:2">
+        <article class="w-card"><div class="w-media small">Готовая кровать цеха в интерьере: каркас и изголовье из массива</div><h3>Кровати</h3><p>Двуспальные, односпальные, с ящиками, двухъярусные.</p><p class="w-price">Цена: от <span class="w-ask">[запросить]</span></p><a class="w-btn ghost" href="#konstruktor">Хочу такую</a></article>
+        <article class="w-card"><div class="w-media small">Стол цеха: металлическое подстолье и столешница из массива или слэба</div><h3>Столы</h3><p>Обеденные, письменные, из слэба, журнальные.</p><p class="w-price">Цена: от <span class="w-ask">[запросить]</span></p><a class="w-btn ghost" href="#konstruktor">Хочу такую</a></article>
+        <article class="w-card"><div class="w-media small">Стеллаж-перегородка в комнате с книгами и цветами</div><h3>Стеллажи и полки</h3><p>Открытые, перегородки, под книги и цветы.</p><p class="w-price">Цена: от <span class="w-ask">[запросить]</span></p><a class="w-btn ghost" href="#konstruktor">Хочу такую</a></article>
+        <article class="w-card"><div class="w-media small">Барная стойка или кухонный остров цеха на кухне клиента</div><h3>Барные стойки и кухонные острова</h3><p class="w-price">Цена: от <span class="w-ask">[запросить]</span></p><a class="w-btn ghost" href="#konstruktor">Хочу такую</a></article>
+        <article class="w-card"><div class="w-media small">Подстолье без столешницы: видны сварные швы и площадки крепления</div><h3>Подстолья для столов</h3><p>Под свою столешницу или слэб, отправляем по России.</p><p class="w-price">Цена: от <span class="w-ask">[запросить]</span></p><a class="w-btn ghost" href="#konstruktor">Хочу такую</a></article>
+      </div>
+      <p class="w-note">На телефоне карточки 2 в ряд, пятая карточка (подстолья) – на всю ширину. «Хочу такую» ведёт в конструктор и сразу отмечает группу в шаге 1.</p>
+    </div>
+  </section>
+
+  <!-- блок 3: почему металл + массив – снимает «скрипит и шатается», «ДСП развалится»; текст из плана -->
+  <section class="w-block" id="metall" data-n="3" data-name="Почему металл + массив" data-question="Чем лучше магазинной?" data-proof="каркас из профильной трубы на сварке, массив; толщины, породы, нагрузка [запросить]">
+    <div class="w-wrap w-stack">
+      <h2>Почему металл и массив</h2>
+      <p class="w-muted">Мебель, которую не придётся менять.</p>
+      <div class="w-hero">
+        <ul class="w-stack">
+          <li><b>Каркас</b> – профильная труба <span class="w-ask">[запросить: сечение]</span>, сварка, порошковая краска.</li>
+          <li><b>Дерево</b> – массив <span class="w-ask">[запросить: порода]</span>, масло или лак.</li>
+          <li><b>Нагрузка</b> – кровать держит <span class="w-ask">[запросить]</span> кг.</li>
+        </ul>
+        <div class="w-media">Шоу-рум: угол кровати в разрезе – сварной узел, крепление ламелей, ножка-подпятник, крупно с подписями. Доказывает: шатать и скрипеть нечему</div>
+      </div>
+      <p class="w-note">Разрез или макросъёмка узла с выносками-подписями – главный довод блока, не атмосферное фото.</p>
+    </div>
+  </section>
+
+  <!-- блок 4: конструктор – 4 шага выбором, затем телефон и согласие; снимает «как выбрать»; текст из плана -->
+  <section class="w-block" id="konstruktor" data-n="4" data-name="Конструктор" data-question="Как выбрать?" data-proof="размер, цвет каркаса, порода, покрытие">
+    <div class="w-wrap w-stack">
+      <h2>Соберите свою мебель за 4 шага</h2>
+      <form class="w-form wide" onsubmit="event.preventDefault()">
+        <fieldset class="w-choice"><legend>1. Что</legend>
+          <div class="w-opts"><label><input type="radio" name="chto"> Кровать</label><label><input type="radio" name="chto"> Стол</label><label><input type="radio" name="chto"> Стеллаж</label><label><input type="radio" name="chto"> Стойка</label><label><input type="radio" name="chto"> Подстолье</label></div>
+        </fieldset>
+        <fieldset class="w-choice"><legend>2. Размер</legend>
+          <div class="w-opts"><label><input type="radio" name="razmer"> 140</label><label><input type="radio" name="razmer"> 160</label><label><input type="radio" name="razmer"> 180</label><label><input type="radio" name="razmer"> 200</label><label><input type="radio" name="razmer"> Нестандарт</label></div>
+          <label class="w-field">Свой размер, см<input placeholder="длина × ширина × высота"></label>
+        </fieldset>
+        <fieldset class="w-choice"><legend>3. Цвет каркаса</legend>
+          <div class="w-opts"><label><input type="radio" name="cvet"> Чёрный</label><label><input type="radio" name="cvet"> Белый</label><label><input type="radio" name="cvet"> Графит</label></div>
+        </fieldset>
+        <fieldset class="w-choice"><legend>4. Дерево</legend>
+          <div class="w-opts"><label><input type="radio" name="derevo"> Дуб</label><label><input type="radio" name="derevo"> Сосна</label><label><input type="radio" name="derevo"> Карагач</label></div>
+          <span class="w-ask">[запросить: какие породы есть]</span>
+        </fieldset>
+        <label class="w-field">Телефон для расчёта<input type="tel" id="k-phone" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__"></label>
+        <label class="w-check"><input type="checkbox" id="k-agree" data-agree> <span>Согласен на обработку <a href="#">персональных данных</a></span></label>
+        <button class="w-btn" id="k-send" type="submit" disabled>Получить расчёт</button>
+      </form>
+      <p class="w-note">На телефоне шаги по одному экрану с полосой «шаг 2 из 4», варианты – крупные плитки 2 в ряд; после шага 4 – телефон и согласие. Цвета каркаса показать образцами.</p>
+    </div>
+  </section>
+
+  <!-- блок 5: работы – снимает «вы правда делали?»; материала нет – задача собрать фото -->
+  <section class="w-block" id="raboty" data-n="5" data-name="Работы" data-question="Вы правда делали?" data-proof="фото работ в квартирах [запросить]">
+    <div class="w-wrap w-stack">
+      <h2>Наши работы в квартирах</h2>
+      <p><span class="w-ask">[запросить фото: 6–10 готовых изделий в квартирах клиентов, с подписью «что, размер, город»]</span></p>
+      <div class="w-grid" style="--cols:3;--cols-m:2">
+        <div class="w-media small">Кровать у клиента в спальне, подпись: размер и порода. Доказывает: делали для жилья</div>
+        <div class="w-media small">Обеденный стол из слэба на кухне клиента, подпись: размер. Доказывает: нестандарт сделали</div>
+        <div class="w-media small">Стеллаж-перегородка в квартире, подпись: город. Доказывает: возим не только по Новосибирску</div>
+      </div>
+      <p class="w-note">Лента фото листается вбок внутри блока (не вся страница); на каждом фото короткая подпись, без стока.</p>
+    </div>
+  </section>
+
+  <!-- блок 6: как заказать и доставка – снимает «долго» и «не привезёте»; текст из плана -->
+  <section class="w-block" id="dostavka" data-n="6" data-name="Как заказать и доставка" data-question="Как долго и привезёте ли?" data-proof="регламент; доставка по НСО и РФ [запросить]">
+    <div class="w-wrap w-stack">
+      <h2>Как заказать и доставка по России</h2>
+      <ol class="w-steps" style="--cols:4">
+        <li><b>Размер и фото комнаты</b></li>
+        <li><b>Расчёт и эскиз</b></li>
+        <li><b>Изготовление</b><span class="w-ask">[запросить срок]</span></li>
+        <li><b>Доставка и сборка</b></li>
+      </ol>
+      <p>По России – транспортной компанией в обрешётке <span class="w-ask">[запросить]</span>.</p>
+      <div class="w-media small">Изделие в обрешётке перед отправкой транспортной компанией. Доказывает: довезём целым</div>
+    </div>
+  </section>
+
+  <!-- блок 7: вопросы – скрип, вес, сборка; ответы цеха не подтверждены -->
+  <section class="w-block" id="voprosy" data-n="7" data-name="Вопросы" data-question="Скрип, вес, сборка?" data-proof="ответы цеха [запросить]">
+    <div class="w-wrap w-stack w-faq">
+      <h2>Вопросы о скрипе, весе и сборке</h2>
+      <details open><summary>Будет ли скрипеть кровать?</summary><p>Каркас на сварке, ламели на резиновых держателях <span class="w-ask">[запросить, так ли у цеха]</span>.</p></details>
+      <details><summary>Пролезет ли в подъезд?</summary><p>Кровать разборная <span class="w-ask">[запросить]</span>.</p></details>
+      <details><summary>Сколько ждать?</summary><p><span class="w-ask">[запросить]</span></p></details>
+      <details><summary>Можно по фото из интернета?</summary><p>Да, пришлите фото и размеры.</p></details>
+    </div>
+  </section>
+
+  <!-- блок 8: заявка – первый шаг; текст из плана, H2 из SEO-задания -->
+  <section class="w-block" id="zayavka" data-n="8" data-name="Заявка" data-question="Первый шаг?" data-proof="расчёт по размерам клиента">
+    <div class="w-wrap">
+      <form class="w-form" onsubmit="event.preventDefault()">
+        <h2>Рассчитать мебель по размерам</h2>
+        <label class="w-field">Имя<input id="f-name" autocomplete="name"></label>
+        <label class="w-field">Телефон<input type="tel" id="f-phone" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__"></label>
+        <label class="w-field">Что нужно<textarea id="f-chto" placeholder="кровать 180×200, чёрный каркас, дуб"></textarea></label>
+        <label class="w-check"><input type="checkbox" id="f-agree" data-agree> <span>Согласен на обработку <a href="#">персональных данных</a></span></label>
+        <button class="w-btn" id="f-send" type="submit" disabled>Получить расчёт</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="w-footer"><div class="w-wrap w-stack">
+  <span>Другие линейки цеха: <a href="/sad-i-otdyh">Сад и отдых</a> · <a href="/kupolnye-besedki">Купольные беседки</a></span>
+  <span><span class="w-ask">[запросить: название, адрес цеха, телефон, реквизиты]</span></span>
+  <span><a href="#">Политика обработки персональных данных</a> · <a href="#">Согласие</a> · <a href="#">Cookie</a></span>
+</div></footer>
+
+<div class="w-sticky"><a class="w-btn" href="tel:+70000000000">Позвонить</a><a class="w-btn ghost" href="#">Написать</a></div>
+
+<script>
+// Переключатели прототипа и подпись логики над каждым блоком (по умолчанию скрыто).
+document.querySelectorAll('.w-block').forEach(function (b) {
+  var d = b.dataset, el = document.createElement('div');
+  el.className = 'w-logic';
+  el.innerHTML = '<b>Блок ' + (d.n || '?') + ' · ' + (d.name || '') + '</b><br>Вопрос клиента: ' + (d.question || '–') + '<br>Опора: ' + (d.proof || '–');
+  if (b.tagName === 'HEADER') b.prepend(el); else (b.querySelector('.w-wrap') || b).prepend(el);
+});
+document.getElementById('t-logic').addEventListener('change', function (e) { document.body.classList.toggle('show-logic', e.target.checked); });
+document.getElementById('t-notes').addEventListener('change', function (e) { document.body.classList.toggle('show-notes', e.target.checked); });
+document.getElementById('t-seo').addEventListener('change', function (e) { document.body.classList.toggle('show-seo', e.target.checked); });
+(function () {
+  var src = document.getElementById('w-seo'), box = document.getElementById('w-seo-box');
+  if (!src || !box) return;
+  var d = JSON.parse(src.textContent), esc = function (t) { return String(t).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); };
+  var len = function (t, max) { return ' <span class="' + (t.length > max ? 'bad' : '') + '">(' + t.length + ' / ' + max + ')</span>'; };
+  var heads = [].map.call(document.querySelectorAll('main h1, main h2, header h1'), function (h) { return '<li>' + h.tagName + ' – ' + esc(h.textContent.trim()) + '</li>'; }).join('');
+  var alts = [].map.call(document.querySelectorAll('.w-media[data-alt]'), function (m) { return '<li>' + esc(m.dataset.alt) + '</li>'; }).join('');
+  box.innerHTML = '<table><tr><td>title</td><td>' + esc(d.title) + len(d.title, 65) + '</td></tr><tr><td>description</td><td>' + esc(d.description) + len(d.description, 160) +
+    '</td></tr><tr><td>запрос</td><td>' + esc(d.zapros || '–') + '</td></tr><tr><td>заголовки</td><td><ul>' + heads + '</ul></td></tr><tr><td>alt</td><td><ul>' + (alts || '<li>–</li>') +
+    '</ul></td></tr><tr><td>разметка</td><td>' + esc(d.schema || '–') + '</td></tr><tr><td>ссылки</td><td><ul>' + (d.links || []).map(function (l) { return '<li>' + esc(l) + '</li>'; }).join('') + '</ul></td></tr></table>';
+})();
+document.getElementById('ask-count').textContent = document.querySelectorAll('.w-ask').length;
+// Любая форма: галочка data-agree включает кнопку отправки своей формы.
+document.querySelectorAll('form').forEach(function (f) {
+  var a = f.querySelector('[data-agree]'), btn = f.querySelector('button[type="submit"], button:not([type])');
+  if (a && btn) a.addEventListener('change', function () { btn.disabled = !a.checked; });
+});
+</script>
+</body>
+</html>
