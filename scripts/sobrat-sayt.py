@@ -14,5 +14,7 @@ html = head + html[:m.end()] + '</head>\n<body>\n' + html[m.end():] + '\n</body>
 open(os.path.join(site, 'index.html'), 'w').write(html)
 for f in names.values():
     shutil.copy(os.path.join(ROOT, 'prototipy', f), os.path.join(site, f))
+# Контур спроса (дашборд Codex, vite build с base /ceh-metall-derevo/kontur/) – готовая сборка из kontur/
+shutil.copytree(os.path.join(ROOT, 'kontur'), os.path.join(site, 'kontur'))
 open(os.path.join(site, 'robots.txt'), 'w').write('User-agent: *\nDisallow: /\n')
 print('ok', sorted(os.listdir(site)))
