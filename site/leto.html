@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Прототип – Лето (/sad-i-otdyh)</title>
+<!-- kit.css вставляется целиком внутрь <style> (прототип – один файл, открывается без интернета) -->
+<style>/* Комплект чёрно-белого прототипа (маркетолог → site-prototype).
+   Прототип показывает смысл, текст, порядок и действие – не дизайн. Цвета только серые; дизайнер делает визуал после «да» владельца.
+   Блок: <section class="w-block" data-n="1" data-name="Первый экран" data-question="вопрос клиента" data-proof="опора"> */
+:root {
+  --ink: #141414; --muted: #5f5f5f; --line: #b9b9b9; --fill: #ececec; --fill2: #f6f6f6; --paper: #ffffff;
+  --note: #fff6c8; --note-line: #c9b44a; --ask: #7a1f1f;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, Menlo, Consolas, monospace;
+  --wrap: 1180px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.55 var(--font); }
+img { max-width: 100%; }
+a { color: var(--ink); }
+h1, h2, h3 { margin: 0; line-height: 1.2; text-wrap: balance; }
+h1 { font-size: clamp(28px, 4.2vw, 46px); }
+h2 { font-size: clamp(22px, 3vw, 32px); }
+h3 { font-size: 18px; }
+p { margin: 0; }
+.w-wrap { max-width: var(--wrap); margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.w-stack { display: grid; gap: 14px; }
+.w-muted { color: var(--muted); }
+
+/* Панель прототипа: переключатели «Логика» и «Комментарии» */
+.w-bar { position: sticky; top: 0; z-index: 50; background: var(--ink); color: #fff; font: 13px/1.3 var(--mono); }
+.w-bar .w-wrap { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding-block: 8px; }
+.w-bar b { font-weight: 600; }
+.w-bar label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+
+/* Блок и его подпись логики */
+.w-block { border-top: 1px dashed var(--line); padding-block: 40px; position: relative; }
+.w-logic { display: none; font: 12.5px/1.45 var(--mono); background: var(--fill2); border: 1px solid var(--line); padding: 8px 10px; margin-bottom: 18px; }
+body.show-logic .w-logic { display: block; }
+.w-logic b { font-weight: 700; }
+.w-note { display: none; background: var(--note); border: 1px dashed var(--note-line); padding: 8px 10px; font-size: 13.5px; margin-top: 12px; }
+body.show-notes .w-note { display: block; }
+.w-note::before { content: "Дизайнеру: "; font-weight: 700; }
+.w-seo { display: none; font: 13px/1.5 var(--mono); background: #eef3ff; border: 1px solid #8aa0d6; padding: 12px 14px; margin: 12px auto; max-width: var(--wrap); }
+body.show-seo .w-seo { display: block; }
+.w-seo table { border-collapse: collapse; width: 100%; }
+.w-seo td { border-top: 1px solid #c9d4ee; padding: 4px 6px; vertical-align: top; }
+.w-seo td:first-child { white-space: nowrap; font-weight: 700; width: 1%; }
+.w-seo .bad { color: var(--ask); font-weight: 700; }
+.w-seo ul { margin: 0; padding-left: 18px; }
+.w-ask { color: var(--ask); font-weight: 600; background: #f7e9e9; padding: 0 4px; }
+
+/* Место под фото/видео/схему: роль, а не «картинка» */
+.w-media { background: repeating-linear-gradient(45deg, var(--fill), var(--fill) 10px, var(--fill2) 10px, var(--fill2) 20px);
+  border: 1px solid var(--line); min-height: 220px; display: grid; place-items: center; text-align: center; padding: 16px;
+  color: var(--muted); font-size: 14px; }
+.w-media::before { content: "▣ "; }
+.w-media.small { min-height: 120px; }
+
+/* Кнопки */
+.w-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; border: 2px solid var(--ink);
+  background: var(--ink); color: #fff; font-weight: 600; text-decoration: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+.w-btn.ghost { background: transparent; color: var(--ink); }
+.w-btn[disabled] { opacity: .45; cursor: not-allowed; }
+.w-hint { font-size: 13px; color: var(--muted); }
+
+/* Шапка */
+.w-header .w-wrap { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; justify-content: space-between; padding-block: 12px; }
+.w-logo { border: 2px solid var(--ink); padding: 6px 10px; font-weight: 700; }
+.w-descr { font-size: 13.5px; color: var(--muted); max-width: 34ch; }
+.w-contacts-top { display: grid; gap: 2px; font-size: 14px; text-align: right; }
+.w-nav { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14.5px; border-top: 1px solid var(--line); padding-block: 8px; }
+
+/* Первый экран */
+.w-hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: center; }
+.w-hero ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.w-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+/* Сетки и карточки */
+.w-grid { display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 14px; }
+.w-card { border: 1px solid var(--line); padding: 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.w-card .w-media { min-height: 140px; }
+.w-price { font-weight: 700; }
+
+/* Этапы */
+.w-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr)); gap: 14px; counter-reset: st; }
+.w-steps li { border: 1px solid var(--line); padding: 14px; counter-increment: st; display: grid; gap: 6px; }
+.w-steps li::before { content: counter(st); font-weight: 700; font-size: 22px; }
+
+/* Таблица */
+.w-table-wrap { overflow-x: auto; }
+.w-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.w-table th, .w-table td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+.w-table th { background: var(--fill2); }
+
+/* FAQ */
+.w-faq details { border: 1px solid var(--line); padding: 12px 14px; }
+.w-faq details + details { border-top: 0; }
+.w-faq summary { font-weight: 600; cursor: pointer; }
+
+/* Форма */
+.w-form { border: 2px solid var(--ink); padding: 18px; display: grid; gap: 12px; max-width: 520px; }
+.w-field { display: grid; gap: 4px; font-size: 14px; }
+.w-field input, .w-field select { min-height: 44px; border: 1px solid var(--ink); padding: 0 10px; font: inherit; background: #fff; }
+.w-check { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; }
+
+/* Полоса призыва */
+.w-cta { background: var(--fill); padding: 24px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; }
+
+/* Подвал */
+.w-footer { background: var(--fill2); border-top: 1px solid var(--line); padding-block: 28px; font-size: 14px; }
+
+/* Липкая панель действий на телефоне */
+.w-sticky { display: none; }
+header.w-block { padding-block: 0; border-top: 0; }
+header.w-block > .w-logic { margin: 8px auto; max-width: var(--wrap); }
+
+@media (max-width: 760px) {
+  .w-hide-m { display: none !important; }
+  /* Мобильная шапка: логотип, короткий дескриптор и «Меню»; звонок и мессенджеры – в липкой панели снизу */
+  .w-header .w-wrap { flex-wrap: nowrap; padding-block: 8px; gap: 10px; }
+  .w-header .w-contacts-top, .w-header .w-wrap > .w-btn, .w-nav { display: none !important; }
+  .w-header .w-descr { font-size: 12px; line-height: 1.3; }
+  .w-header > .w-wrap:first-of-type::after { content: "☰ Меню"; margin-left: auto; border: 1px solid var(--ink); padding: 6px 10px; font-size: 13px; white-space: nowrap; }
+  .w-hero .w-media, .w-block[data-n="1"] .w-media:first-of-type { min-height: 160px; }
+  .w-bar .w-wrap { padding-block: 4px; gap: 4px 10px; font-size: 11px; }
+  .w-hero { grid-template-columns: 1fr; }
+  .w-grid { grid-template-columns: repeat(var(--cols-m, 2), minmax(0, 1fr)); }
+  .w-steps { grid-template-columns: 1fr; }
+  .w-contacts-top { text-align: left; }
+  .w-block { padding-block: 28px; }
+  .w-sticky { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    padding: 8px max(12px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
+    background: #fff; border-top: 1px solid var(--line); }
+  body { padding-bottom: 72px; }
+}
+@media (max-width: 420px) { .w-grid.one-m { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<!-- Прототип лендинга «Лето». Источник текста: docs/marketing/2026-10-19-leto.md (план и тексты), SEO: docs/marketing/seo-leto.md.
+     H2 – из SEO-задания; строка под H2 – заголовок блока из плана маркетолога (оставлены оба, выбор за владельцем). -->
+<div class="w-bar"><div class="w-wrap">
+  <b>Прототип · Цех металл + дерево · Лето (/sad-i-otdyh) · версия 21.10.2026</b>
+  <label><input type="checkbox" id="t-logic"> Логика блоков</label>
+  <label><input type="checkbox" id="t-notes"> Комментарии дизайнеру</label>
+  <label><input type="checkbox" id="t-seo"> SEO страницы</label>
+  <span>Меток «запросить»: <b id="ask-count">0</b></span>
+</div></div>
+
+<script type="application/json" id="w-seo">{"title": "Качели, беседки, костровые чаши для дачи – цех в Новосибирске", "description": "Садовые качели, костровые чаши, мангалы с крышей и беседки из металла и дерева. Своё производство в Новосибирской области, доставка и монтаж.", "h1": "Летняя зона для дачи из металла и дерева – от цеха в Новосибирской области", "zapros": "беседки и качели для дачи новосибирск (доп.: качели садовые 26 589, беседка для дачи 13 516, пергола 12 422, костровая чаша 7 237, дровница 4 707, мангал с крышей 2 769 – Wordstat НСО, год); интент коммерческий, местный", "schema": "FAQPage – по видимым вопросам (после ответов цеха); Product – по карточкам только с видимой ценой (сейчас цен нет – не размечать); Organization – когда будут реквизиты", "links": ["/kupolnye-besedki – Купольные беседки для дачи и бассейна", "/mebel-loft – Мебель лофт для дома"]}</script>
+<div class="w-seo" id="w-seo-box"></div>
+
+<!-- блок 0: шапка – кто мы и как связаться; текст дескриптора из плана -->
+<header class="w-header w-block" data-n="0" data-name="Шапка" data-question="Кто вы и как связаться?" data-proof="дескриптор, телефон, мессенджер">
+  <div class="w-wrap">
+    <span class="w-logo">ЛОГО</span>
+    <span class="w-descr">Цех металл + дерево. Качели, костровые чаши, мангальные зоны и беседки для дачи – Новосибирская область <span class="w-ask w-hide-m">[запросить: название и логотип]</span></span>
+    <span class="w-contacts-top"><a href="#zayavka"><span class="w-ask">[запросить: телефон и WhatsApp]</span></a><span class="w-muted">WhatsApp</span></span>
+    <a class="w-btn ghost" href="#zayavka">Рассчитать комплект</a>
+  </div>
+  <nav class="w-wrap w-nav"><a href="#chto-delaem">Что делаем</a><a href="#nabory">Наборы</a><a href="#materialy">Из чего</a><a href="#raboty">Работы</a><a href="#kak-zakazat">Как заказать</a><a href="#voprosy">Вопросы</a></nav>
+</header>
+
+<main>
+  <!-- блок 1: первый экран – оффер; снимает «сделаете ли мне летнюю зону»; текст из плана, H1 из SEO-задания -->
+  <section class="w-block" data-n="1" data-name="Первый экран" data-question="Сделаете мне летнюю зону на дачу?" data-proof="спрос НСО; цех металл + дерево">
+    <div class="w-wrap">
+      <div class="w-hero">
+        <div class="w-stack">
+          <h1>Летняя зона для дачи из металла и дерева – от цеха в Новосибирской области</h1>
+          <p>Качели, костровые чаши, мангалы и беседки. Делаем сами, привозим и ставим.</p>
+          <ul>
+            <li><b>Своё производство</b> – металл и дерево в одном цеху, без перекупщиков</li>
+            <li><b>Под ваш участок</b> – размеры, цвет каркаса, порода дерева</li>
+            <li><b>Доставка и монтаж</b> по области <span class="w-ask">[запросить: радиус и цену]</span></li>
+          </ul>
+          <div class="w-actions"><a class="w-btn" href="#zayavka">Рассчитать комплект</a><a class="w-btn ghost" href="#zayavka">Написать в WhatsApp</a></div>
+          <p class="w-hint">Ответим в течение дня, пришлём 2–3 варианта с ценой</p>
+        </div>
+        <div class="w-media" data-alt="Садовые качели и костровая чаша из металла на дачном участке в Новосибирской области">Летняя зона на участке – качели и костровая чаша вечером, огонь, люди без лиц крупно. Доказывает: это готовое место отдыха, а не «металл»</div>
+      </div>
+      <p class="w-note">Фото – живая работа цеха, не сток; вечерний свет, огонь в чаше. Срок «в течение дня» подтвердить у владельца до вёрстки. На телефоне фото под кнопкой, кнопка в первом окне.</p>
+    </div>
+  </section>
+
+  <!-- блок 2: ассортимент 4 карточки; снимает «что можно заказать и почём»; цены рынка – подсказка владельцу -->
+  <section class="w-block" id="chto-delaem" data-n="2" data-name="Что делаем" data-question="Что именно можно заказать и почём?" data-proof="ассортимент; цены рынка НСО как ориентир (Avito 27.08.2026)">
+    <div class="w-wrap w-stack">
+      <h2>Качели, костровые чаши, мангалы и беседки – что делаем и почём</h2>
+      <p><b>Четыре вещи, ради которых едут на дачу</b></p>
+      <div class="w-grid" style="--cols:4;--cols-m:1">
+        <article class="w-card"><div class="w-media small" data-alt="Садовые качели из металла и дерева с крышей для дачи">Качели цеха на участке, видно каркас и сиденье. Доказывает: вещь есть и выглядит так</div><h3>Садовые качели</h3><p>2- и 3-местные, с крышей и без.</p><p class="w-muted">Ориентир рынка НСО: 25–32 тыс. ₽ (Avito).</p><p class="w-note">Ориентир рынка – в бою убрать: подсказка владельцу для цены, не текст клиенту.</p><p>Наша цена: <span class="w-ask">[запросить: цена качелей]</span></p><a class="w-btn ghost" href="#zayavka">Хочу такую</a></article>
+        <article class="w-card"><div class="w-media small" data-alt="Костровая чаша из металла с решёткой-гриль">Чаша с огнём, рядом крышка и решётка-гриль. Доказывает: три размера и комплектация видны</div><h3>Костровые чаши</h3><p>Ø 600 / 800 / 1000 мм, крышка, решётка-гриль.</p><p class="w-muted">Ориентир рынка: 6–27 тыс. ₽.</p><p class="w-note">Ориентир рынка – в бою убрать.</p><p>Наша цена: <span class="w-ask">[запросить: цена чаш по размерам]</span></p><a class="w-btn ghost" href="#zayavka">Хочу такую</a></article>
+        <article class="w-card"><div class="w-media small" data-alt="Мангал с крышей, столом и полкой для дров">Мангальная зона: крыша, стол, полка с дровами. Доказывает: это зона, а не голый мангал</div><h3>Мангалы и мангальные зоны</h3><p>С крышей, столом, полкой для дров.</p><p class="w-muted">Ориентир рынка: 8–80 тыс. ₽.</p><p class="w-note">Ориентир рынка – в бою убрать.</p><p>Наша цена: <span class="w-ask">[запросить: цена мангалов]</span></p><a class="w-btn ghost" href="#zayavka">Хочу такую</a></article>
+        <article class="w-card"><div class="w-media small" data-alt="Беседка и пергола с металлическим каркасом и деревом для дачи">Беседка или пергола цеха: металлический каркас, дерево, поликарбонат. Доказывает: делаем и навесы, и перголы</div><h3>Беседки, навесы и перголы</h3><p>Металлический каркас, дерево, поликарбонат.</p><p class="w-muted">Ориентир рынка: 28–90 тыс. ₽ за типовую.</p><p class="w-note">Ориентир рынка – в бою убрать.</p><p>Наша цена: <span class="w-ask">[запросить: цена беседок и пергол]</span></p><a class="w-btn ghost" href="#zayavka">Хочу такую</a></article>
+      </div>
+      <p class="w-note">«Хочу такую» ведёт к форме и заранее отмечает нужный пункт «что нужно». На телефоне карточки в одну колонку, кнопка в каждой.</p>
+    </div>
+  </section>
+
+  <!-- блок 3: наборы; снимает «как будет выглядеть вместе»; текст из плана -->
+  <section class="w-block" id="nabory" data-n="3" data-name="Соберите зону" data-question="Как это будет выглядеть вместе?" data-proof="готовые наборы (3 шт.)">
+    <div class="w-wrap w-stack">
+      <h2>Готовые наборы для летней зоны</h2>
+      <p><b>Готовые наборы – чтобы не собирать по частям</b></p>
+      <div class="w-grid" style="--cols:3;--cols-m:1">
+        <article class="w-card"><div class="w-media small" data-alt="Набор Вечер у огня: костровая чаша, скамьи и дровница">Чаша, 2 скамьи и дровница одной композицией на участке. Доказывает: вещи сочетаются между собой</div><h3>«Вечер у огня»</h3><p>Костровая чаша + 2 скамьи + дровница.</p></article>
+        <article class="w-card"><div class="w-media small" data-alt="Набор Шашлычная: мангал с крышей, стол и полка для дров">Мангал с крышей, стол и полка для дров вместе. Доказывает: готовое место для готовки</div><h3>«Шашлычная»</h3><p>Мангал с крышей + стол + полка для дров.</p></article>
+        <article class="w-card"><div class="w-media small" data-alt="Набор Семейная: качели, беседка 3×3 и стол с лавками">Качели рядом с беседкой 3×3, стол с лавками. Доказывает: зона на всю семью</div><h3>«Семейная»</h3><p>Качели + беседка 3×3 + стол с лавками.</p></article>
+      </div>
+      <p>Цена набора: <span class="w-ask">[запросить: цена каждого набора]</span></p>
+      <div class="w-actions"><a class="w-btn" href="#zayavka">Рассчитать набор</a></div>
+    </div>
+  </section>
+
+  <!-- блок 4: материалы; снимает «не сгниёт и не проржавеет»; шоу-рум узла в разрезе -->
+  <section class="w-block" id="materialy" data-n="4" data-name="Из чего делаем" data-question="Не сгниёт и не проржавеет?" data-proof="металл, покрытие, порода дерева – запросить у цеха">
+    <div class="w-wrap w-stack">
+      <h2>Из чего делаем: металл, покрытие, дерево</h2>
+      <p><b>Чтобы стояло больше одного сезона</b></p>
+      <div class="w-hero">
+        <ul>
+          <li><b>Каркас</b> – профильная труба <span class="w-ask">[запросить: сечение]</span>, сварка, грунт + порошковая краска <span class="w-ask">[запросить: грунт и краска]</span></li>
+          <li><b>Дерево</b> – <span class="w-ask">[запросить: порода, пропитка]</span></li>
+          <li><b>Чаши</b> – сталь <span class="w-ask">[запросить: толщина]</span> мм</li>
+        </ul>
+        <div class="w-media" data-alt="Узел садовой конструкции в разрезе: сварной шов, покрытие, крепёж дерева">Узел в разрезе с номерами: 1 – шов, 2 – покрытие, 3 – крепёж дерева. Доказывает: видно, почему не ржавеет и не гниёт</div>
+      </div>
+      <p class="w-note">Шоу-рум: по нажатию на номер – пояснение к узлу. На телефоне номера крупные, пояснение раскрывается под фото.</p>
+    </div>
+  </section>
+
+  <!-- блок 5: работы; снимает «вы правда это делали»; материала нет – задача собрать фото -->
+  <section class="w-block" id="raboty" data-n="5" data-name="Работы" data-question="Вы правда это делали?" data-proof="фото работ цеха – запросить">
+    <div class="w-wrap w-stack">
+      <h2>Наши работы на участках</h2>
+      <p><b>Что уже стоит на участках</b></p>
+      <p><span class="w-ask">[запросить у цеха: 6–9 фото работ на участках; номера машин и лица размыть]</span></p>
+      <div class="w-grid" style="--cols:3;--cols-m:2">
+        <div class="w-media small" data-alt="Садовые качели на участке в Новосибирской области – работа цеха">Качели на участке клиента. Доказывает: стоят у живых людей</div>
+        <div class="w-media small" data-alt="Костровая чаша на даче – работа цеха">Костровая чаша на даче, после сезона. Доказывает: не прогорела</div>
+        <div class="w-media small" data-alt="Мангальная зона с крышей на участке – работа цеха">Мангальная зона на участке. Доказывает: делаем зоны целиком</div>
+        <div class="w-media small" data-alt="Беседка из металла и дерева на участке – работа цеха">Беседка на участке. Доказывает: крупные вещи тоже наши</div>
+        <div class="w-media small" data-alt="Пергола на дачном участке – работа цеха">Пергола над площадкой. Доказывает: делаем перголы</div>
+        <div class="w-media small" data-alt="Набор у костровой чаши со скамьями на даче – работа цеха">Набор целиком на участке. Доказывает: наборы реальны</div>
+      </div>
+      <p class="w-note">Лента с прокруткой вбок внутри блока (не страницы); подпись под фото: что и где (район НСО). Номера машин и лица размыты.</p>
+    </div>
+  </section>
+
+  <!-- блок 6: этапы; снимает «что будет после заявки»; сроки запросить -->
+  <section class="w-block" id="kak-zakazat" data-n="6" data-name="Как заказать" data-question="Что будет после заявки?" data-proof="регламент цеха – запросить сроки">
+    <div class="w-wrap w-stack">
+      <h2>Как заказать: 4 шага</h2>
+      <p><b>От заявки до огня – 4 шага</b></p>
+      <ol class="w-steps" style="--cols:4">
+        <li><b>Заявка</b><span>Размеры, что хотите, фото участка по желанию.</span></li>
+        <li><b>Расчёт</b><span>2–3 варианта с ценой в течение дня.</span></li>
+        <li><b>Изготовление</b><span><span class="w-ask">[запросить: срок]</span> рабочих дней.</span></li>
+        <li><b>Доставка и сборка</b><span>Привозим, ставим, показываем уход.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- блок 7: ранний заказ; снимает «почему сейчас, а не в мае»; опора – сезонность спроса -->
+  <section class="w-block" data-n="7" data-name="Скидка за ранний заказ" data-question="Почему заказывать сейчас, а не в мае?" data-proof="сезонность спроса (пик июнь–июль, Wordstat НСО)">
+    <div class="w-wrap w-cta">
+      <div class="w-stack">
+        <h2>Ранний заказ зимой</h2>
+        <p><b>Закажите зимой – получите к первым шашлыкам</b></p>
+        <p>Весной цех загружен: пик запросов – май–июль. Заказ до <span class="w-ask">[запросить: дата]</span> – цена зимы и место в графике.</p>
+        <p>Скидка: <span class="w-ask">[запросить у владельца – есть ли и сколько]</span></p>
+      </div>
+      <a class="w-btn" href="#zayavka">Забронировать место в графике</a>
+    </div>
+    <div class="w-wrap"><p class="w-note">Если владелец не даёт скидку и «цену зимы» – блок переписать в «место в графике» без цены, обещание не оставлять без опоры.</p></div>
+  </section>
+
+  <!-- блок 8: вопросы; снимает «доставка, сборка, зимовка»; ответы цеха запросить -->
+  <section class="w-block" id="voprosy" data-n="8" data-name="Вопросы" data-question="Доставка, сборка, зимовка?" data-proof="ответы цеха – запросить">
+    <div class="w-wrap w-stack w-faq">
+      <h2>Вопросы о доставке, монтаже и зимовке</h2>
+      <details><summary>Сколько стоит доставка по области?</summary><p><span class="w-ask">[запросить: цена доставки по области]</span></p></details>
+      <details><summary>Нужно ли бетонировать качели?</summary><p><span class="w-ask">[запросить: нужно ли бетонировать качели]</span></p></details>
+      <details><summary>Что делать с чашей и качелями зимой?</summary><p><span class="w-ask">[запросить: уход зимой]</span></p></details>
+      <details><summary>Можно ли по своему эскизу?</summary><p>Да, присылайте фото или рисунок.</p></details>
+      <details><summary>Есть ли гарантия?</summary><p><span class="w-ask">[запросить: гарантия]</span></p></details>
+    </div>
+  </section>
+
+  <!-- блок 9: заявка; квиза нет – чекбоксы «что нужно» -->
+  <section class="w-block" id="zayavka" data-n="9" data-name="Заявка" data-question="Как сделать первый шаг?" data-proof="расчёт с ценой после заявки">
+    <div class="w-wrap">
+      <form class="w-form" onsubmit="event.preventDefault()">
+        <h2>Рассчитать летнюю зону</h2>
+        <p><b>Посчитаем вашу летнюю зону</b></p>
+        <label class="w-field">Имя<input id="f-name" autocomplete="name"></label>
+        <label class="w-field">Телефон<input id="f-phone" inputmode="tel" placeholder="+7 (___) ___-__-__"></label>
+        <fieldset class="w-stack" style="border:0;padding:0;margin:0">
+          <legend>Что нужно</legend>
+          <label class="w-check"><input type="checkbox" name="nuzhno" value="kacheli"> <span>Качели</span></label>
+          <label class="w-check"><input type="checkbox" name="nuzhno" value="chasha"> <span>Чаша</span></label>
+          <label class="w-check"><input type="checkbox" name="nuzhno" value="mangal"> <span>Мангал</span></label>
+          <label class="w-check"><input type="checkbox" name="nuzhno" value="besedka"> <span>Беседка</span></label>
+        </fieldset>
+        <label class="w-check"><input type="checkbox" id="f-agree" data-agree> <span>Согласен на обработку <a href="#">персональных данных</a></span></label>
+        <button class="w-btn" id="f-send" type="submit" disabled>Получить расчёт</button>
+        <p class="w-hint">Перезвоним в течение дня</p>
+      </form>
+      <p class="w-note">Квиза нет. Галочка согласия пустая, кнопка активна только после неё. Пункты «что нужно» – можно несколько.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="w-footer"><div class="w-wrap w-stack">
+  <span>Ещё из цеха: <a href="/kupolnye-besedki">Купольные беседки для дачи и бассейна</a> · <a href="/mebel-loft">Мебель лофт для дома</a></span>
+  <span><span class="w-ask">[запросить: название, адрес цеха, реквизиты ИП/ООО]</span> · <a href="#">Политика обработки персональных данных</a> · <a href="#">Согласие</a> · <a href="#">Cookie</a></span>
+</div></footer>
+
+<div class="w-sticky"><a class="w-btn" href="#zayavka">Позвонить</a><a class="w-btn ghost" href="#zayavka">Написать</a></div>
+<p class="w-note w-wrap">Липкая панель: «Позвонить» – tel:, «Написать» – WhatsApp; номер запросить (метка в шапке).</p>
+
+<script>
+// Переключатели прототипа и подпись логики над каждым блоком (по умолчанию скрыто).
+document.querySelectorAll('.w-block').forEach(function (b) {
+  var d = b.dataset, el = document.createElement('div');
+  el.className = 'w-logic';
+  el.innerHTML = '<b>Блок ' + (d.n || '?') + ' · ' + (d.name || '') + '</b><br>Вопрос клиента: ' + (d.question || '–') + '<br>Опора: ' + (d.proof || '–');
+  if (b.tagName === 'HEADER') b.prepend(el); else (b.querySelector('.w-wrap') || b).prepend(el);
+});
+document.getElementById('t-logic').addEventListener('change', function (e) { document.body.classList.toggle('show-logic', e.target.checked); });
+document.getElementById('t-notes').addEventListener('change', function (e) { document.body.classList.toggle('show-notes', e.target.checked); });
+document.getElementById('t-seo').addEventListener('change', function (e) { document.body.classList.toggle('show-seo', e.target.checked); });
+(function () {
+  var src = document.getElementById('w-seo'), box = document.getElementById('w-seo-box');
+  if (!src || !box) return;
+  var d = JSON.parse(src.textContent), esc = function (t) { return String(t).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); };
+  var len = function (t, max) { return ' <span class="' + (t.length > max ? 'bad' : '') + '">(' + t.length + ' / ' + max + ')</span>'; };
+  var heads = [].map.call(document.querySelectorAll('main h1, main h2, header h1'), function (h) { return '<li>' + h.tagName + ' – ' + esc(h.textContent.trim()) + '</li>'; }).join('');
+  var alts = [].map.call(document.querySelectorAll('.w-media[data-alt]'), function (m) { return '<li>' + esc(m.dataset.alt) + '</li>'; }).join('');
+  box.innerHTML = '<table><tr><td>title</td><td>' + esc(d.title) + len(d.title, 65) + '</td></tr><tr><td>description</td><td>' + esc(d.description) + len(d.description, 160) +
+    '</td></tr><tr><td>запрос</td><td>' + esc(d.zapros || '–') + '</td></tr><tr><td>заголовки</td><td><ul>' + heads + '</ul></td></tr><tr><td>alt</td><td><ul>' + (alts || '<li>–</li>') +
+    '</ul></td></tr><tr><td>разметка</td><td>' + esc(d.schema || '–') + '</td></tr><tr><td>ссылки</td><td><ul>' + (d.links || []).map(function (l) { return '<li>' + esc(l) + '</li>'; }).join('') + '</ul></td></tr></table>';
+})();
+document.getElementById('ask-count').textContent = document.querySelectorAll('.w-ask').length;
+// Любая форма: галочка data-agree включает кнопку отправки своей формы.
+document.querySelectorAll('form').forEach(function (f) {
+  var a = f.querySelector('[data-agree]'), btn = f.querySelector('button[type="submit"], button:not([type])');
+  if (a && btn) a.addEventListener('change', function () { btn.disabled = !a.checked; });
+});
+</script>
+</body>
+</html>
