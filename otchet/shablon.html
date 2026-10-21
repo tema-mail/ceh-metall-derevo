@@ -1,0 +1,199 @@
+<title>Три сезона цеха</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Golos+Text:wght@400;500;600&display=swap">
+<style>
+/* Макет: «паспорт изделия» – узкая колонка текста, широкие таблицы и календарь сезонов, у каждой линейки свой цвет-маркировка, как краска на заготовке */
+:root{
+  --bg:#f2f3f1; --panel:#ffffff; --ink:#1d2225; --muted:#5d666d; --line:#d5d9d6;
+  --steel:#4f5b64; --leto:#b9770e; --kupol:#2b6f8e; --loft:#7a4b33; --god:#4f5b64;
+  --good:#2e7d4f; --warn:#a86a00; --bad:#a63d32; --heat0:#e6e9e6;
+  --f-disp:"IBM Plex Sans Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"Golos Text",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#15191b; --panel:#1d2326; --ink:#e7eae8; --muted:#a2abb1; --line:#323a3e;
+  --steel:#9aa7b0; --leto:#e0a33a; --kupol:#5fa9cb; --loft:#c98b69; --god:#9aa7b0;
+  --good:#5fbf86; --warn:#e0a33a; --bad:#e07a6d; --heat0:#262d30; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#15191b; --panel:#1d2326; --ink:#e7eae8; --muted:#a2abb1; --line:#323a3e;
+  --steel:#9aa7b0; --leto:#e0a33a; --kupol:#5fa9cb; --loft:#c98b69; --god:#9aa7b0;
+  --good:#5fbf86; --warn:#e0a33a; --bad:#e07a6d; --heat0:#262d30; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 var(--f-body);margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.text{max-width:68ch}
+h1,h2,h3{font-family:var(--f-disp);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.1rem,5vw,3.4rem);font-weight:700;letter-spacing:-.01em}
+h2{font-size:clamp(1.5rem,3vw,2.1rem);font-weight:600}
+h3{font-size:1.2rem;font-weight:600}
+p{margin:0}
+a{color:var(--kupol)}
+.eyebrow{font:500 .75rem/1.3 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+section{padding-block:48px;border-top:1px solid var(--line)}
+.stack{display:flex;flex-direction:column;gap:16px}
+header.top{padding-block:40px 32px}
+.lead{font-size:1.15rem;color:var(--ink)}
+.muted{color:var(--muted)}
+.tag{display:inline-block;font:500 .72rem/1 var(--f-mono);letter-spacing:.05em;text-transform:uppercase;padding:5px 8px;border-radius:3px;color:#fff;background:var(--c,var(--steel))}
+.c-leto{--c:var(--leto)} .c-kupol{--c:var(--kupol)} .c-loft{--c:var(--loft)} .c-god{--c:var(--god)}
+/* календарь */
+.cal-scroll{overflow-x:auto}
+.cal{display:grid;grid-template-columns:150px repeat(12,minmax(40px,1fr));gap:3px;min-width:640px;font-size:.8rem}
+.cal .h{font:500 .7rem var(--f-mono);color:var(--muted);text-align:center;padding-bottom:4px}
+.cal .rl{font-family:var(--f-disp);font-weight:600;display:flex;align-items:center;gap:8px;padding-right:8px}
+.cal .rl i{width:10px;height:10px;border-radius:2px;background:var(--c)}
+.cal .cell{height:40px;border-radius:3px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px;font:500 .68rem var(--f-mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.season-note{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.season-note div{border-left:3px solid var(--c);padding:4px 0 4px 12px}
+/* линейки */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.kpi{background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:4px}
+.kpi b{display:block;font:600 1.6rem/1.1 var(--f-disp);font-variant-numeric:tabular-nums}
+.kpi span{font-size:.85rem;color:var(--muted)}
+.line-head{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.two{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:28px}
+@media (max-width:800px){.two{grid-template-columns:minmax(0,1fr)}}
+.tbl-scroll{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:4px}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 .7rem var(--f-mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);white-space:nowrap;background:var(--panel);position:sticky;top:0}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.spark{display:block}
+.do{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--c);padding:16px;border-radius:4px}
+.do ul{margin:8px 0 0;padding-left:20px}
+.do li{margin-bottom:6px}
+.proto{display:inline-flex;align-items:center;gap:8px;font-weight:600;text-decoration:none;border:1.5px solid var(--c);color:var(--ink);padding:10px 14px;border-radius:4px}
+.proto:hover,.proto:focus-visible{background:var(--c);color:#fff;outline:none}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filters button{font:500 .85rem var(--f-body);border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:7px 12px;border-radius:20px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.filters button:focus-visible{outline:2px solid var(--kupol);outline-offset:2px}
+.v{font:500 .72rem var(--f-mono);white-space:nowrap}
+.v-good{color:var(--good)} .v-warn{color:var(--warn)} .v-bad{color:var(--bad)}
+.honest{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.honest div{background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:4px}
+.honest b{display:block;margin-bottom:4px}
+footer{padding-block:32px 48px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+@media (prefers-reduced-motion:no-preference){.proto{transition:background .15s,color .15s}}
+</style>
+
+<div class="wrap">
+<header class="top stack">
+  <span class="eyebrow">Цех металл + дерево · Новосибирская область · спрос 10.2024 – 09.2026</span>
+  <h1>Три сезона цеха</h1>
+  <p class="lead text">Цех загружен круглый год, если вести его по календарю спроса, а не по одному товару. Весной и летом – сад и купола, осенью и зимой – мебель лофт. Ворота и навесы дают крупные чеки всё время, кроме зимы.</p>
+  <p class="muted text" id="src-line"></p>
+</header>
+
+<section id="kalendar"><div class="stack">
+  <span class="eyebrow">Календарь спроса</span>
+  <h2>Когда ищут: каждая линейка – в процентах от своего пикового месяца</h2>
+  <p class="text muted">Wordstat, Новосибирская область, месяцы с октября 2025 по сентябрь 2026. Цифра в клетке – запросов за месяц по главным фразам линейки. Чем темнее, тем ближе к пику.</p>
+  <div class="cal-scroll"><div class="cal" id="cal"></div></div>
+  <div class="season-note" id="season-note"></div>
+</div></section>
+
+<div id="lines"></div>
+
+<section id="vse"><div class="stack">
+  <span class="eyebrow">Все 65 товаров из таблицы Codex</span>
+  <h2>Полная таблица: спрос, конкуренты и цены в НСО</h2>
+  <p class="text muted">Спрос – Wordstat НСО, июль 2026 (широкая / точная форма). Конкуренты – объявления и продавцы в выборке Avito по НСО на 27.08.2026, это не весь рынок. Цены – мин / медиана / макс по той же выборке; дешёвые строки часто запчасти и б/у.</p>
+  <div class="filters" id="flt" role="group" aria-label="Фильтр по линейке"></div>
+  <div class="tbl-scroll"><table id="tbl"><thead><tr>
+    <th>Товар</th><th>Линейка</th><th class="r">Спрос, мес.</th><th class="r">Точная</th><th>Год</th><th>Пик</th><th class="r">Объявл. / продавцы</th><th class="r">Цены НСО, ₽</th><th>Вывод</th>
+  </tr></thead><tbody></tbody></table></div>
+</div></section>
+
+<section id="chestno"><div class="stack">
+  <span class="eyebrow">Что измерено, а что нет</span>
+  <h2>Где данные твёрдые, а где пока гипотеза</h2>
+  <div class="honest" id="honest"></div>
+</div></section>
+
+<section id="dalshe"><div class="stack">
+  <span class="eyebrow">Дальше</span>
+  <h2>Что сделать до запуска лендингов</h2>
+  <ol class="text" id="next" style="margin:0;padding-left:20px"></ol>
+</div></section>
+
+<footer id="foot"></footer>
+</div>
+
+<script>
+const DATA = /*DATA*/null;
+const fmt = n => n == null ? '–' : Number(n).toLocaleString('ru-RU');
+const MES = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+const mlabel = k => MES[+k.slice(5) - 1];
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+document.getElementById('src-line').textContent = DATA.src;
+
+// календарь
+(function(){
+  const cal = document.getElementById('cal');
+  let h = '<div></div>' + DATA.months.map(m => `<div class="h">${mlabel(m)}<br>${m.slice(2,4)}</div>`).join('');
+  DATA.calendar.forEach(r => {
+    const mx = Math.max(...r.vals);
+    h += `<div class="rl c-${r.key}"><i></i>${esc(r.name)}</div>`;
+    r.vals.forEach(v => {
+      const p = mx ? v / mx : 0;
+      h += `<div class="cell" title="${esc(r.name)}: ${fmt(v)}" style="background:color-mix(in srgb, var(--c${''}) ${Math.round(8 + p * 82)}%, var(--heat0));${p > .55 ? 'color:#fff' : ''}" data-c="${r.key}">${v >= 1000 ? (v/1000).toFixed(1).replace('.', ',') + 'к' : v}</div>`;
+    });
+  });
+  cal.innerHTML = h;
+  cal.querySelectorAll('.cell').forEach(c => c.classList.add('c-' + c.dataset.c));
+  document.getElementById('season-note').innerHTML = DATA.seasonNotes.map(s => `<div class="c-${s.key}"><b>${esc(s.title)}</b><br><span class="muted">${esc(s.text)}</span></div>`).join('');
+})();
+
+function spark(vals, w = 120, hgt = 28){
+  const mx = Math.max(...vals, 1), st = w / (vals.length - 1);
+  const pts = vals.map((v, i) => `${(i * st).toFixed(1)},${(hgt - 2 - v / mx * (hgt - 4)).toFixed(1)}`).join(' ');
+  return `<svg class="spark" width="${w}" height="${hgt}" viewBox="0 0 ${w} ${hgt}" aria-hidden="true"><polyline points="${pts}" fill="none" stroke="var(--c)" stroke-width="1.6"/></svg>`;
+}
+
+// линейки
+document.getElementById('lines').innerHTML = DATA.lines.map(L => `
+<section id="${L.key}" class="c-${L.key}"><div class="stack">
+  <div class="line-head"><span class="tag c-${L.key}">${esc(L.tag)}</span><span class="eyebrow">${esc(L.season)}</span></div>
+  <h2>${esc(L.title)}</h2>
+  <p class="text lead">${esc(L.story)}</p>
+  <div class="kpis">${L.kpis.map(k => `<div class="kpi"><b>${esc(k.v)}</b><span>${esc(k.l)}</span></div>`).join('')}</div>
+  <div class="two">
+    <div class="stack"><h3>Что ищут</h3>
+      <div class="tbl-scroll"><table><thead><tr><th>Запрос</th><th class="r">НСО, пик</th><th class="r">НСО, год</th><th class="r">Россия, год</th><th>Сезон НСО</th><th class="r">Год к году</th></tr></thead><tbody>
+      ${L.queries.map(q => `<tr><td>${esc(q.phrase)}</td><td class="r">${fmt(q.peak)}</td><td class="r">${fmt(q.nso)}</td><td class="r">${fmt(q.rf)}</td><td>${spark(q.series)}</td><td class="r ${q.yoy == null ? '' : q.yoy >= 10 ? 'v-good' : q.yoy <= -10 ? 'v-bad' : ''}">${q.yoy == null ? '–' : (q.yoy > 0 ? '+' : '') + q.yoy + '%'}</td></tr>`).join('')}
+      </tbody></table></div>
+      <p class="muted" style="font-size:.8rem">«Год» – сумма за 10.2025–09.2026. «Год к году» – апрель–сентябрь 2026 против того же периода 2025. Фразы пересекаются, складывать нельзя.</p>
+    </div>
+    <div class="stack"><h3>Кто продаёт в НСО и почём</h3>
+      <p>${esc(L.market)}</p>
+      <div class="do c-${L.key}"><b>Что делать цеху</b><ul>${L.todo.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>
+      ${L.proto ? `<a class="proto c-${L.key}" href="${esc(L.proto)}" target="_blank" rel="noopener">Прототип лендинга «${esc(L.tag)}» →</a>` : `<span class="muted">${esc(L.protoNote || '')}</span>`}
+    </div>
+  </div>
+</div></section>`).join('');
+
+// полная таблица
+(function(){
+  const flt = document.getElementById('flt'), tb = document.querySelector('#tbl tbody');
+  const opts = [['all','Все']].concat(DATA.lineNames);
+  let cur = 'all';
+  try { cur = localStorage.getItem('ceh-flt') || 'all'; } catch(e) {}
+  function draw(){
+    flt.innerHTML = opts.map(([k, n]) => `<button type="button" id="f-${k}" data-k="${k}" aria-pressed="${k === cur}">${esc(n)}</button>`).join('');
+    const rows = DATA.products.filter(p => cur === 'all' || p.line === cur).sort((a, b) => b.broad - a.broad);
+    tb.innerHTML = rows.map(p => `<tr class="c-${p.lineColor}"><td>${esc(p.name)}</td><td><span class="tag c-${p.lineColor}">${esc(p.lineName)}</span></td><td class="r">${fmt(p.broad)}</td><td class="r">${fmt(p.exact)}</td><td>${p.dyn12 && p.dyn12.some(Boolean) ? spark(p.dyn12, 90, 22) : '–'}</td><td>${esc(p.peak)}</td><td class="r">${p.listings == null ? '–' : p.listings + ' / ' + p.sellers}</td><td class="r">${p.pmin == null ? '–' : fmt(p.pmin) + ' / ' + fmt(p.pmed) + ' / ' + fmt(p.pmax)}</td><td><span class="v v-${p.vcls}">${esc(p.verdict)}</span></td></tr>`).join('');
+  }
+  flt.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; cur = b.dataset.k; try { localStorage.setItem('ceh-flt', cur); } catch(e) {} draw(); });
+  draw();
+})();
+
+document.getElementById('honest').innerHTML = DATA.honest.map(h => `<div><b>${esc(h.t)}</b><span class="muted">${esc(h.d)}</span></div>`).join('');
+document.getElementById('next').innerHTML = DATA.next.map(n => `<li style="margin-bottom:8px">${esc(n)}</li>`).join('');
+document.getElementById('foot').textContent = DATA.foot;
+</script>
